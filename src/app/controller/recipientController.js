@@ -55,14 +55,13 @@ class RecipientController {
         .required()
         .min(11)
         .max(14),
-      rua: Yup.string().required(),
-      numero: Yup.number().required(),
+      rua: Yup.string(),
+      numero: Yup.number(),
       estado: Yup.string()
         .max(2)
         .min(2),
       cidade: Yup.string(),
       cep: Yup.string()
-        .required()
         .min(9)
         .max(9),
     });
@@ -81,7 +80,7 @@ class RecipientController {
 
     if (!recipientFind) {
       return res.status(400).json({
-        message: `This addres not found on system for this CPF: ${recipientFind.cpf}.`,
+        message: `This addres not found on system for this CPF.`,
       });
     }
 
@@ -91,11 +90,9 @@ class RecipientController {
   }
 
   async show(req, res) {
-    const { cpf } = req.query;
-
     const recipientFind = await Recipient.findOne({
       where: {
-        cpf,
+        cpf: req.params.cpf,
       },
     });
 
