@@ -1,9 +1,10 @@
 import Courier from '../models/Courier';
 import File from '../models/File';
+import Delivery from '../models/Delivery';
 
 class CourierController {
   async index(req, res) {
-    const couriers = await Courier.findAll({
+    const couriers = await Delivery.findAll({
       include: [
         {
           model: File,
@@ -32,13 +33,9 @@ class CourierController {
   }
 
   async store(req, res) {
-    const { name, avatar_id, email } = req.body;
+    const { name, email } = req.body;
 
-    const courier = await Courier.create({
-      name,
-      avatar_id,
-      email,
-    });
+    const courier = await Courier.create(req.body);
 
     return res.json(courier);
   }

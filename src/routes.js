@@ -8,6 +8,7 @@ import multerConfig from './config/multer';
 
 import authMiddleware from './app/middlewares/auth';
 import fileController from './app/controller/fileController';
+import deliveryController from './app/controller/deliveryController';
 
 const routes = Router();
 const uploads = multer(multerConfig);
@@ -31,5 +32,11 @@ routes.get('/couriers/:id', courierController.show);
 routes.post('/couriers', courierController.store);
 routes.put('/couriers/:id', courierController.update);
 routes.delete('/couriers/:id', courierController.destroy);
+
+routes.get('/deliveries', deliveryController.index);
+routes.get('/deliveries/:id', deliveryController.show);
+routes.post('/deliveries', deliveryController.store);
+routes.put('/deliveries/:id', deliveryController.update);
+routes.delete('/deliveries/:id', deliveryController.destroy);
 
 export default routes;
