@@ -1,10 +1,11 @@
+import * as Yup from 'yup';
+
 import Courier from '../models/Courier';
 import File from '../models/File';
-import Delivery from '../models/Delivery';
 
 class CourierController {
   async index(req, res) {
-    const couriers = await Delivery.findAll({
+    const couriers = await Courier.findAll({
       include: [
         {
           model: File,
@@ -29,11 +30,40 @@ class CourierController {
       ],
     });
 
+    if (!couriers) {
+      return res.status(400).json({ erro: 'Courrier not found with this ID' });
+    }
+
     return res.json(couriers);
   }
 
   async store(req, res) {
-    const { name, email } = req.body;
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string()
+        .required()
+        .email(),
+    });
+
+    /**
+     * Validation if has name and cpf valid on req.body
+     */
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'validation fails' });
+    }
+
+    /**
+     * Validation if req.email don't has on database to another courier
+     */
+    const { email } = req.body;
+
+    const validEmail = Courier.findOne({ where: { email } });
+
+    if (validEmail) {
+      return res
+        .status(400)
+        .json({ error: 'This email already in use for another courrier' });
+    }
 
     const courier = await Courier.create(req.body);
 
@@ -41,6 +71,21 @@ class CourierController {
   }
 
   async update(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string(),
+      email: Yup.string().email(),
+    });
+
+    /**
+     * validate if email and name are valids
+     */
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'validation fails' });
+    }
+
+    /**
+     * valid of id is valid
+     */
     const { id } = req.params;
 
     const courier = await Courier.findByPk(id);
