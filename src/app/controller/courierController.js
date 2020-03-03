@@ -57,7 +57,7 @@ class CourierController {
      */
     const { email } = req.body;
 
-    const validEmail = Courier.findOne({ where: { email } });
+    const validEmail = await Courier.findOne({ where: { email } });
 
     if (validEmail) {
       return res
@@ -105,7 +105,7 @@ class CourierController {
     if (!courier) {
       return res
         .status(400)
-        .json({ message: `Can't find courier whit this cpf.` });
+        .json({ message: `Can't find courier whit this id.` });
     }
     await courier.destroy();
 

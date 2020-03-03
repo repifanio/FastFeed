@@ -21,7 +21,7 @@ routes.get('/users', userController.index);
 
 routes.get('/recipients', recipientController.index);
 routes.post('/recipients', recipientController.store);
-routes.put('/recipients', recipientController.update);
+routes.put('/recipients/:cpf', recipientController.update);
 routes.get('/recipient/:cpf', recipientController.show);
 routes.delete('/recipient/:cpf', recipientController.destroy);
 
