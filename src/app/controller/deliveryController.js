@@ -109,6 +109,11 @@ class DeliveryController {
   async update(req, res) {
     const delivery = await Delivery.findByPk(req.params.id);
 
+    // validatio if delivery exists
+    if (!delivery) {
+      return res.status(400).json({ error: 'delivery not found with this id' });
+    }
+
     const deliveryUp = await delivery.update(req.body);
 
     return res.json(deliveryUp);
