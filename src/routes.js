@@ -6,9 +6,9 @@ import sessionController from './app/controller/sessionController';
 import userController from './app/controller/userController';
 import recipientController from './app/controller/recipientController';
 import courierController from './app/controller/courierController';
+import deliveryStatus from './app/controller/deliveryStatus';
 import fileController from './app/controller/fileController';
 import deliveryController from './app/controller/deliveryController';
-import deliveryStatus from './app/controller/deliveryStatus';
 
 import authMiddleware from './app/middlewares/auth';
 
