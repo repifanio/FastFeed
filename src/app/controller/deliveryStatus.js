@@ -16,7 +16,7 @@ class DeliveryStatus {
 
     const { id } = req.params;
 
-    const delivery = Delivery.findByPk(id, {
+    const delivery = await Delivery.findByPk(id, {
       include: [
         {
           model: Courier,
@@ -30,10 +30,10 @@ class DeliveryStatus {
       return res.status(400).json({ error: 'delivery not found with this ID' });
     }
 
-    const newDelivery = Delivery.update(req.body);
+    const newDelivery = await delivery.update(req.body);
 
     await Mail.sendMail({
-      to: `${delivery.name} <${delivery.email}>`,
+      to: `${newDelivery.courier.name} <${newDelivery.courier.email}>`,
       subject: 'New Delivery for you',
       text: 'A new delivery is add for you. Good Job!',
     });
