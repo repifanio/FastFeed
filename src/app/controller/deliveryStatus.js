@@ -1,6 +1,8 @@
 import * as Yup from 'yup';
 
 import Delivery from '../models/Delivery';
+import Courier from '../models/Courier';
+import Mail from '../../lib/Mail';
 
 class DeliveryStatus {
   async startDelivery(req, res) {
@@ -14,12 +16,27 @@ class DeliveryStatus {
 
     const { id } = req.params;
 
-    const delivery = Delivery.findByPk(id);
+    const delivery = Delivery.findByPk(id, {
+      include: [
+        {
+          model: Courier,
+          as: 'courier',
+          attributes: ['name', 'email'],
+        },
+      ],
+    });
+
     if (!delivery) {
       return res.status(400).json({ error: 'delivery not found with this ID' });
     }
 
     const newDelivery = Delivery.update(req.body);
+
+    await Mail.sendMail({
+      to: `${delivery.name} <${delivery.email}>`,
+      subject: 'New Delivery for you',
+      text: 'A new delivery is add for you. Good Job!',
+    });
 
     return res.json(newDelivery);
   }

@@ -105,7 +105,7 @@ class CourierController {
     if (!courier) {
       return res
         .status(400)
-        .json({ message: `Can't find courier whit this id.` });
+        .json({ message: "Can't find courier whit this id." });
     }
     await courier.destroy();
 

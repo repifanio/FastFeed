@@ -87,7 +87,6 @@ class DeliveryController {
 
   async store(req, res) {
     const schema = Yup.object().shape({
-      signature_id: Yup.number().required(),
       recipient_id: Yup.number().required(),
       courier_id: Yup.number().required(),
       product: Yup.string().required(),
