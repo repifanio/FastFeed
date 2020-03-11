@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { isBefore, parseISO, startOfHour, parse } from 'date-fns';
+import { isBefore, parseISO, startOfHour } from 'date-fns';
 
 import Delivery from '../models/Delivery';
 import Courier from '../models/Courier';
