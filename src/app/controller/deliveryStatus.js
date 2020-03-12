@@ -58,14 +58,15 @@ class DeliveryStatus {
     // Envio do email
     await Mail.sendMail({
       to: `${newDelivery.courier.name} <${newDelivery.courier.email}>`,
-      subject: 'New Delivery for you',
-      text: 'A new delivery is add for you. Good Job!',
+      subject: `New Delivery for you ${newDelivery.courier.name}!`,
+      text: `A new delivery is add for you. The product is: ${newDelivery.product}  Good Job!`,
     });
 
     return res.json(newDelivery);
   }
 
   async endDelivery(req, res) {
+    // Valida se o end_date foi enviado.
     const schema = Yup.object().shape({
       end_date: Yup.date().required(),
     });
@@ -73,15 +74,19 @@ class DeliveryStatus {
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ erro: 'validation fails' });
     }
-
+    // Fim da validação de data.
+    // ##########################################################################
     const { id } = req.params;
 
-    const delivery = Delivery.findByPk(id);
+    // Verifica se a entrega existe
+    const delivery = await Delivery.findByPk(id);
     if (!delivery) {
       return res.status(400).json({ error: 'delivery not found with this ID' });
     }
+    // Fim da validação de entrega existente
+    // ##########################################################################
 
-    const newDelivery = Delivery.update(req.body);
+    const newDelivery = await delivery.update(req.body);
 
     return res.json(newDelivery);
   }
