@@ -69,6 +69,7 @@ class DeliveryStatus {
     // Valida se o end_date foi enviado.
     const schema = Yup.object().shape({
       end_date: Yup.date().required(),
+      signature_id: Yup.number().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
